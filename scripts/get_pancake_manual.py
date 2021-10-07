@@ -21,6 +21,10 @@ from brownie import *
 
 def main():
     print ('manual pancakeswap pool {}'.format(manual_pancakeswap_pool))
+
+    print ('connecting to bsc main')
+    network.connect('bsc-main')
+
     #contract = Contract(manual_pancakeswap_pool)
     contract = Contract(manual_pancakeswap_pool)
     cakePerBlock = contract.cakePerBlock() 
@@ -34,6 +38,7 @@ def main():
     lpSupply = cakeContract.balanceOf(manual_pancakeswap_pool)
     apr = annualBlockReward/(lpSupply*100000000*100) 
     print ('apr {} %'.format(round(apr, 2)))
+    network.disconnect()
     return apr
 
 # brownie run <script> --network bsc-main

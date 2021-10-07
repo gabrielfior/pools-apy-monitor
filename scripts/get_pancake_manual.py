@@ -23,10 +23,15 @@ def main():
     print ('manual pancakeswap pool {}'.format(manual_pancakeswap_pool))
 
     print ('connecting to bsc main')
-    network.connect('bsc-main')
+    if not network.is_connected():
+        network.connect('bsc-main')
 
-    #contract = Contract(manual_pancakeswap_pool)
-    contract = Contract(manual_pancakeswap_pool)
+    try:
+        contract = Contract(manual_pancakeswap_pool)
+    except:
+        print ('trying from explorer...')
+        contract = Contract.from_explorer(manual_pancakeswap_pool)
+    
     cakePerBlock = contract.cakePerBlock() 
     poolAllocPoint = contract.poolInfo("0")[1]
     totalAllocPoint = contract.totalAllocPoint()

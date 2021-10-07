@@ -19,6 +19,15 @@ ERROR
 '''
 from brownie import *
 
+def get_contract_by_address(address):
+    try:
+        print ('trying by accessing network')
+        contract = Contract(address)
+    except:
+        print ('trying from explorer...')
+        contract = Contract.from_explorer(address)
+    return contract
+
 def main():
     print ('manual pancakeswap pool {}'.format(manual_pancakeswap_pool))
 
@@ -26,24 +35,22 @@ def main():
     if not network.is_connected():
         network.connect('bsc-main')
 
-    try:
-        contract = Contract(manual_pancakeswap_pool)
-    except:
-        print ('trying from explorer...')
-        contract = Contract.from_explorer(manual_pancakeswap_pool)
-    
+    contract = get_contract_by_address(manual_pancakeswap_pool)    
     cakePerBlock = contract.cakePerBlock() 
     poolAllocPoint = contract.poolInfo("0")[1]
     totalAllocPoint = contract.totalAllocPoint()
     numberOfBlocks = 20 * 60 * 24 * 365
     blockReward = cakePerBlock*poolAllocPoint/totalAllocPoint
     annualBlockReward = blockReward*numberOfBlocks*1000000000000
-    cakeContract = Contract(cake_token)
+
+    cakeContract = get_contract_by_address(cake_token)
 
     lpSupply = cakeContract.balanceOf(manual_pancakeswap_pool)
     apr = annualBlockReward/(lpSupply*100000000*100) 
     print ('apr {} %'.format(round(apr, 2)))
-    network.disconnect()
+
+    if network.is_connected():
+        network.disconnect()
     return apr
 
 # brownie run <script> --network bsc-main

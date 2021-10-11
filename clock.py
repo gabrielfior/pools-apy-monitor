@@ -17,7 +17,7 @@ def timed_job():
     apr = run('scripts/get_pancake_manual')
     db = DBWriter()
     apy = APYWrapper(apr, Pools.PANCAKE_SWAP_MANUAL_CAKE.value.platform_name,
-        Pools.PANCAKE_SWAP_MANUAL_CAKE.value.chain_name, datetime.now(), apr, False)
+                     Pools.PANCAKE_SWAP_MANUAL_CAKE.value.chain_name, datetime.now(), False, apr)
     db.write_apy(apy)
 
 sched.start()

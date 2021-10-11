@@ -1,22 +1,4 @@
-manual_pancakeswap_pool = "0x73feaa1eE314F8c655E354234017bE2193C9E24E"
-cake_token = "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82"
-auto_cake_pool = "0xa80240Eb5d7E05d3F250cF000eEc0891d00b51CC"
-bsc_api_token = 'RU7Y28HFEAFBU7EB9ZV1QHMSMDUZSHNY1Q'
-'''
-OK
-    cake_per_block
-    totalAllocPoint
-    allocPoints
-    numberOfBlocks
-    blockReward
-    annualBlockReward 
-    lpSupply - ? 163298821012138285583292953
-
-ERROR
-    
-    
-    apr - ? 64.37
-'''
+from db.Platforms import Pools, Tokens, Networks
 from brownie import *
 
 def get_contract_by_address(address):
@@ -28,12 +10,19 @@ def get_contract_by_address(address):
         contract = Contract.from_explorer(address)
     return contract
 
-def main():
-    print ('manual pancakeswap pool {}'.format(manual_pancakeswap_pool))
-
-    print ('connecting to bsc main')
+def connect_safe():
     if not network.is_connected():
-        network.connect('bsc-main')
+        network.connect(Networks.BSC_MAIN.value)
+
+def disconnect_safe():
+    if network.is_connected():
+        network.disconnect()
+
+def main():
+    manual_pancakeswap_pool = Pools.PANCAKE_SWAP_MANUAL_CAKE.value.pool_address
+    cake_token = Tokens.CAKE.value
+
+    connect_safe()
 
     contract = get_contract_by_address(manual_pancakeswap_pool)    
     cakePerBlock = contract.cakePerBlock() 
@@ -46,11 +35,10 @@ def main():
     cakeContract = get_contract_by_address(cake_token)
 
     lpSupply = cakeContract.balanceOf(manual_pancakeswap_pool)
-    apr = annualBlockReward/(lpSupply*100000000*100) 
-    print ('apr {} %'.format(round(apr, 2)))
+    apr = annualBlockReward/(lpSupply*100000000*100)
 
-    if network.is_connected():
-        network.disconnect()
+    disconnect_safe()
+
     return apr
 
 # brownie run <script> --network bsc-main

@@ -1,0 +1,1 @@
+# price_per_full_share (from contract) * user_shares (from contract) = number_of_cake_of_user

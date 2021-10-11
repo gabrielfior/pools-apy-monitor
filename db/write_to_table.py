@@ -22,10 +22,5 @@ class DBWriter:
         self.TABLENAME = 'apys'
     
     def write_apy(self, apy_value: APYWrapper):
-        df = pd.DataFrame(apy_value, index=[0])
+        df = pd.DataFrame(dataclasses.asdict(apy_value))
         df.to_sql(self.TABLENAME, self.engine, if_exists='append')
-
-if __name__ == "__main__":
-    a = APYWrapper(0.45, 'dummy', '0x73feaa1eE314F8c655E354234017bE2193C9E24E', datetime.datetime.now())
-    b = DBWriter()
-    b.write_apy(dataclasses.asdict(a))

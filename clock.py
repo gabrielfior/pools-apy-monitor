@@ -13,7 +13,7 @@ DATABASE_URL = os.environ['DATABASE_URL']
 sched = BlockingScheduler()
 
 
-@sched.scheduled_job('interval', minutes=3)
+@sched.scheduled_job('interval', minutes=30)
 def timed_job():
     apr = run('scripts/get_pancake_manual')
     db = DBWriter()

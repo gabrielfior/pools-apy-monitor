@@ -42,7 +42,7 @@ def timed_job_curve_base_apy():
                                  pool_enum.value.pool_address,
                                  datetime.now(),
                                  False,
-                                 apy)
+                                 apy*100)
         db.write_apy(apy_wrapper)
 
 

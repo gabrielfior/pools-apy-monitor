@@ -14,7 +14,7 @@ DATABASE_URL = os.environ['DATABASE_URL']
 sched = BlockingScheduler()
 
 
-@sched.scheduled_job('interval', minutes=90)
+@sched.scheduled_job('interval', minutes=180)
 def timed_job_pancake_manual():
     apr = run('scripts/get_pancake_manual')
     db = DBWriter()
@@ -27,7 +27,7 @@ def timed_job_pancake_manual():
     db.write_apy(apy)
 
 
-@sched.scheduled_job('interval', minutes=90)
+@sched.scheduled_job('interval', minutes=180)
 def timed_job_curve_base_apy():
     apys = CurveFetcher().fetch_daily_stats_curve()
 

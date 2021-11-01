@@ -13,6 +13,7 @@ class APYWrapper:
     datetime_crawl: datetime.datetime
     auto_compound: bool
     apr: float
+    lp_token_value: float
 
 
 class DBWriter:

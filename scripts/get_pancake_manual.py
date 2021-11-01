@@ -37,9 +37,11 @@ def main():
     lpSupply = cakeContract.balanceOf(manual_pancakeswap_pool)
     apr = annualBlockReward/(lpSupply*100000000*100)
 
+    cake_address = contract.cake()
+
     disconnect_safe()
 
-    return apr
+    return apr, cake_address
 
 # brownie run <script> --network bsc-main
 

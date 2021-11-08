@@ -14,8 +14,6 @@ from scripts.beefy_fetcher import BeefyFetcher
 from scripts.get_curve_base_apy import CurveFetcher
 from scripts.yearn_fetcher import YearnFetcher
 
-DATABASE_URL = os.environ['DATABASE_URL']
-
 sched = BlockingScheduler()
 
 

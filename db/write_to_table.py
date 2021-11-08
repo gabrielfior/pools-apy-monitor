@@ -19,7 +19,7 @@ class APYWrapper:
 class DBWriter:
 
     def __init__(self) -> None:
-        DATABASE_URL = os.environ['DATABASE_URL'].replace('postgres', 'postgresql')
+        DATABASE_URL = os.environ['DATABASE_URL_DIGITAL_OCEAN'].replace('postgres', 'postgresql')
         self.engine = sqlalchemy.create_engine(DATABASE_URL)
         self.TABLENAME = 'apys'
 

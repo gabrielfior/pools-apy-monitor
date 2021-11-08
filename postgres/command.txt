@@ -1,0 +1,3 @@
+# \l (show databases)
+# \c DATABASE_NAME
+# \d (show tables)

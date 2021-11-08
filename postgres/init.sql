@@ -1,5 +1,5 @@
 
-create table apys
+create table IF NOT EXISTS apys
 (
     index          bigint,
     platform       text,

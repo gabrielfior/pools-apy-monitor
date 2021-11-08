@@ -17,7 +17,7 @@ from scripts.yearn_fetcher import YearnFetcher
 sched = BlockingScheduler()
 
 
-@sched.scheduled_job('interval', minutes=10)
+@sched.scheduled_job('interval', minutes=90)
 def timed_job_beefy():
     apys, lp_json, pool_addresses = BeefyFetcher().fetch_daily_stats()
 
@@ -41,7 +41,7 @@ def timed_job_beefy():
         db.write_apy(apy_wrapper)
 
 
-@sched.scheduled_job('interval', minutes=10)
+@sched.scheduled_job('interval', minutes=90)
 def timed_job_yearn():
     yf = YearnFetcher()
     apys = yf.fetch_daily_stats()
@@ -72,7 +72,7 @@ def timed_job_yearn():
         db.write_apy(apy_wrapper)
 
 
-@sched.scheduled_job('interval', minutes=10)
+@sched.scheduled_job('interval', minutes=90)
 def timed_job_pancake_manual():
     apr, cake_address = run('scripts/get_pancake_manual')
 
@@ -90,7 +90,7 @@ def timed_job_pancake_manual():
     db.write_apy(apy)
 
 
-@sched.scheduled_job('interval', minutes=10)
+@sched.scheduled_job('interval', minutes=90)
 def timed_job_curve_base_apy():
     apys = CurveFetcher().fetch_daily_stats_curve()
 

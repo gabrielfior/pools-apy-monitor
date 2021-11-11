@@ -30,8 +30,14 @@ class BeefyFetcher:
         for jdict in pool_js:
             # in most cases id == oracleId, however for some strange cases oracleId
             # should be used for matching APYs and/or LPs.
-            pool_id = jdict['oracleId']
+
             address = jdict['earnContractAddress']
-            pool_id_to_address[pool_id] = address
+
+            if jdict['oracleId'] != jdict['id']:
+                # divide into 2 pools
+                pool_id_to_address[jdict['id']] = address
+
+            # we add the oracleId anyways for later mapping.
+            pool_id_to_address[jdict['oracleId']] = address
 
         return pool_id_to_address

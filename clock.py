@@ -3,8 +3,6 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 
 from brownie import run
 
-import os
-
 from pycoingecko import CoinGeckoAPI
 
 from db.Platforms import Pools

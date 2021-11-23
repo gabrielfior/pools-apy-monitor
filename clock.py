@@ -35,7 +35,9 @@ def timed_job_beefy():
                                  datetime.now(),
                                  True,
                                  apy * 100,
-                                 lp_value)
+                                 lp_value,
+                                 tvl=None,
+                                 crawl_source='beefy')
         db.write_apy(apy_wrapper)
 
 
@@ -66,7 +68,9 @@ def timed_job_yearn():
                                  datetime.now(),
                                  None,
                                  apy_value * 100,
-                                 lp_price)
+                                 lp_price,
+                                 tvl=None,
+                                 crawl_source='yearn')
         db.write_apy(apy_wrapper)
 
 
@@ -84,7 +88,9 @@ def timed_job_pancake_manual():
                      datetime.now(),
                      False,
                      apr,
-                     price_json[cake_address]['usd'])
+                     price_json[cake_address]['usd'],
+                                 tvl=None,
+                                 crawl_source='pancake')
     db.write_apy(apy)
 
 
@@ -104,7 +110,9 @@ def timed_job_curve_base_apy():
                                  datetime.now(),
                                  False,
                                  apy * 100,
-                                 None)  # no LP token available under this endpoint, to be determined if available elsewhere
+                                 None,
+                                 tvl=None,
+                                 crawl_source='curve')  # no LP token available under this endpoint, to be determined if available elsewhere
         db.write_apy(apy_wrapper)
 
 

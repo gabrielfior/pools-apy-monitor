@@ -14,6 +14,8 @@ class APYWrapper:
     auto_compound: bool
     apr: float
     lp_token_value: float
+    tvl: float
+    crawl_source: str
 
 
 class DBWriter:

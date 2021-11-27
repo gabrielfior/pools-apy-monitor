@@ -79,7 +79,7 @@ def timed_job_yearn():
                                  crawl_source='yearn')
         db.write_apy(apy_wrapper)
 
-
+'''
 @sched.scheduled_job('interval', minutes=60)
 def timed_job_pancake_manual():
     apr, cake_address = run('scripts/get_pancake_manual')
@@ -98,7 +98,7 @@ def timed_job_pancake_manual():
                                  tvl=None,
                                  crawl_source='pancake')
     db.write_apy(apy)
-
+'''
 
 @sched.scheduled_job('interval', minutes=60)
 def timed_job_curve_base_apy():

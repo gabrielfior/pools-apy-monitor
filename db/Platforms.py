@@ -33,5 +33,7 @@ class StatsUrls(Enum):
     POLYGON_CURVE = 'https://stats.curve.fi/raw-stats-polygon/apys.json'
     BEEFY_FINANCE_APY = 'https://api.beefy.finance/apy/breakdown'
     BEEFY_FINANCE_LP = 'https://api.beefy.finance/lps'
-    BEEFY_FINANCE_POOL_ADDRESSES = 'https://raw.githubusercontent.com/beefyfinance/beefy-app/prod/src/features/configure/vault/polygon_pools.js'
+    BEEFY_FINANCE_POLYGON_POOL_ADDRESS = 'https://raw.githubusercontent.com/beefyfinance/beefy-app/prod/src/features/configure/vault/polygon_pools.js'
+    BEEFY_FINANCE_CELO_POOL_ADDRESS = 'https://raw.githubusercontent.com/beefyfinance/beefy-app/prod/src/features/configure/vault/celo_pools.js'
+    BEEFY_FINANCE_BSC_POOL_ADDRESS = 'https://raw.githubusercontent.com/beefyfinance/beefy-app/prod/src/features/configure/vault/bsc_pools.js'
     YEARN_FINANCE = 'https://vaults.finance/all'

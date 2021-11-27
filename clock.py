@@ -15,22 +15,27 @@ from scripts.yearn_fetcher import YearnFetcher
 sched = BlockingScheduler()
 
 
-@sched.scheduled_job('interval', minutes=90)
+@sched.scheduled_job('interval', minutes=60)
 def timed_job_beefy():
-    apys, lp_json, pool_addresses = BeefyFetcher().fetch_daily_stats()
-
     db = DBWriter()
+    apy_wrappers = []
+    apys, lp_json, pool_addresses_and_chain = BeefyFetcher().fetch_daily_stats()
 
-    for k, address in pool_addresses.items():
-
-        if k not in apys or apys[k]['totalApy'] is None:
+    for k, apy_value in apys.items():
+        if 'totalApy' in apy_value and apy_value['totalApy'] is not None:
+            apy = apy_value['totalApy']
+        elif 'vaultApr' in apy_value and apy_value['vaultApr'] is not None:
+            apy = apy_value['vaultApr']
+        elif 'tradingApr' in apy_value and apy_value['tradingApr'] is not None:
+            apy = apy_value['tradingApr']
+        else:
             continue
 
-        apy = apys[k]['totalApy']
         lp_value = lp_json[k] if k in lp_json else None
+        chain, address = pool_addresses_and_chain.get(k, (None, None))
 
         apy_wrapper = APYWrapper(k,
-                                 None,
+                                 chain,
                                  address,
                                  datetime.now(),
                                  True,
@@ -38,10 +43,11 @@ def timed_job_beefy():
                                  lp_value,
                                  tvl=None,
                                  crawl_source='beefy')
-        db.write_apy(apy_wrapper)
+        apy_wrappers.append(apy_wrapper)
 
+    db.write_all_apys(apy_wrappers)
 
-@sched.scheduled_job('interval', minutes=90)
+@sched.scheduled_job('interval', minutes=60)
 def timed_job_yearn():
     yf = YearnFetcher()
     apys = yf.fetch_daily_stats()
@@ -74,7 +80,7 @@ def timed_job_yearn():
         db.write_apy(apy_wrapper)
 
 
-@sched.scheduled_job('interval', minutes=90)
+@sched.scheduled_job('interval', minutes=60)
 def timed_job_pancake_manual():
     apr, cake_address = run('scripts/get_pancake_manual')
 
@@ -94,7 +100,7 @@ def timed_job_pancake_manual():
     db.write_apy(apy)
 
 
-@sched.scheduled_job('interval', minutes=90)
+@sched.scheduled_job('interval', minutes=60)
 def timed_job_curve_base_apy():
     apys = CurveFetcher().fetch_daily_stats_curve()
 

@@ -1,7 +1,7 @@
 from datetime import datetime
 from apscheduler.schedulers.blocking import BlockingScheduler
 
-from brownie import run
+#from brownie import run
 
 from pycoingecko import CoinGeckoAPI
 
@@ -15,8 +15,9 @@ from scripts.yearn_fetcher import YearnFetcher
 sched = BlockingScheduler()
 
 
-@sched.scheduled_job('interval', minutes=60)
+@sched.scheduled_job('interval', minutes=45)
 def timed_job_beefy():
+    print ('processing job beefy')
     db = DBWriter()
     apy_wrappers = []
     apys, lp_json, pool_addresses_and_chain = BeefyFetcher().fetch_daily_stats()
@@ -42,11 +43,13 @@ def timed_job_beefy():
                                  apy * 100,
                                  lp_value,
                                  tvl=None,
-                                 crawl_source='beefy')
+                                 crawl_source='beefy-test')
         apy_wrappers.append(apy_wrapper)
 
     db.write_all_apys(apy_wrappers)
+    print ('finished writing beefy pools to DB')
 
+'''
 @sched.scheduled_job('interval', minutes=60)
 def timed_job_yearn():
     yf = YearnFetcher()
@@ -78,7 +81,7 @@ def timed_job_yearn():
                                  tvl=None,
                                  crawl_source='yearn')
         db.write_apy(apy_wrapper)
-
+'''
 '''
 @sched.scheduled_job('interval', minutes=60)
 def timed_job_pancake_manual():
@@ -100,8 +103,9 @@ def timed_job_pancake_manual():
     db.write_apy(apy)
 '''
 
-@sched.scheduled_job('interval', minutes=60)
+@sched.scheduled_job('interval', minutes=45)
 def timed_job_curve_base_apy():
+    print ('processing job curve')
     apys = CurveFetcher().fetch_daily_stats_curve()
 
     # We only return stats for aave and atricrypto3 since they are the most profitable ones.

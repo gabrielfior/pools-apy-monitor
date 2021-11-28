@@ -43,7 +43,7 @@ def timed_job_beefy():
                                  apy * 100,
                                  lp_value,
                                  tvl=None,
-                                 crawl_source='beefy-test')
+                                 crawl_source='beefy')
         apy_wrappers.append(apy_wrapper)
 
     db.write_all_apys(apy_wrappers)

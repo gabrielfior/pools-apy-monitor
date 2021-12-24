@@ -27,6 +27,7 @@ class DBWriter:
             DATABASE_URL = os.environ['DATABASE_URL_DIGITAL_OCEAN'].replace('postgres', 'postgresql')
         self.engine = sqlalchemy.create_engine(DATABASE_URL)
         self.TABLENAME = 'apys'
+        self.TOKENSETS_TABLENAME = 'set_tracker'
 
     def write_apy(self, apy_value: APYWrapper):
         df = pd.DataFrame(dataclasses.asdict(apy_value), index=[0])
@@ -37,3 +38,7 @@ class DBWriter:
         # cleanup
         df['apr'] = pd.to_numeric(df['apr'], errors='coerce')
         df.to_sql(self.TABLENAME, self.engine, if_exists='append')
+
+    def write_tokenset_value(self, dict_item):
+        df = pd.DataFrame(dict_item, index=[0])
+        df.to_sql(self.TOKENSETS_TABLENAME, self.engine, if_exists='append', index=False)

@@ -112,7 +112,7 @@ def timed_job_curve_base_apy():
     # Note that rewardAPYs are not tracked since not delivered by Curve Stats API.
     db = DBWriter()
 
-    for apy, pool_enum in zip([apys['aave'], apys['atricrypto3']], [Pools.CURVE_AAVE, Pools.CURVE_ATRICRYPTO3]):
+    for apy, pool_enum in zip([apys['aave'], apys['atricrypto3'], apys['eurtusd']], [Pools.CURVE_AAVE, Pools.CURVE_ATRICRYPTO3]):
         print('Processing {}'.format(pool_enum))
         apy_wrapper = APYWrapper(pool_enum.value.platform_name,
                                  pool_enum.value.chain_name,
@@ -125,5 +125,14 @@ def timed_job_curve_base_apy():
                                  crawl_source='curve')  # no LP token available under this endpoint, to be determined if available elsewhere
         db.write_apy(apy_wrapper)
 
+@sched.scheduled_job('interval', minutes=5)
+def timed_job_token_sets():
+    print ('processing job token sets')
+    db = DBWriter()
+    tokensets_dict = run('scripts/token_sets_fetcher')
+
+    db.write_tokenset_value(tokensets_dict)
+
+    print ('finished writing token sets to DB')
 
 sched.start()

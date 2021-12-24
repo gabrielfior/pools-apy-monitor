@@ -23,6 +23,7 @@ class Pools(Enum):
                                         Networks.BSC_MAIN.value)
     CURVE_ATRICRYPTO3 = PoolWrapper('curve', '0x92215849c439E1f8612b6646060B4E3E5ef822cC', Networks.POLYGON_MAIN.value)
     CURVE_AAVE = PoolWrapper('curve', '0x445FE580eF8d70FF569aB36e80c647af338db351', Networks.POLYGON_MAIN.value)
+    CURVE_EURA3CRV = PoolWrapper('curve', '0xB446BF7b8D6D4276d0c75eC0e3ee8dD7Fe15783A', Networks.POLYGON_MAIN.value)
 
 
 class Tokens(Enum):

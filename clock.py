@@ -3,7 +3,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 
 from brownie import run
 
-from pycoingecko import CoinGeckoAPI
+#from pycoingecko import CoinGeckoAPI
 
 from db.Platforms import Pools
 
@@ -125,7 +125,7 @@ def timed_job_curve_base_apy():
                                  crawl_source='curve')  # no LP token available under this endpoint, to be determined if available elsewhere
         db.write_apy(apy_wrapper)
 
-@sched.scheduled_job('interval', minutes=5)
+@sched.scheduled_job('interval', minutes=15)
 def timed_job_token_sets():
     print ('processing job token sets')
     db = DBWriter()

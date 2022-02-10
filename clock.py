@@ -10,6 +10,7 @@ from db.Platforms import Pools
 from db.write_to_table import APYWrapper, DBWriter
 from scripts.beefy_fetcher import BeefyFetcher
 from scripts.get_curve_base_apy import CurveFetcher
+from scripts.multifarm_fetcher import MultifarmFetcher
 from scripts.yearn_fetcher import YearnFetcher
 
 sched = BlockingScheduler()
@@ -134,5 +135,23 @@ def timed_job_token_sets():
     db.write_tokenset_value(tokensets_dict)
 
     print ('finished writing token sets to DB')
+
+@sched.scheduled_job('interval', minutes=45)
+def timed_job_multifarm():
+    print ('processing job multifarm')
+    db = DBWriter()
+    farm_info = MultifarmFetcher().fetch_daily_stats()
+    apy_wrapper = APYWrapper('Anchor',
+                          farm_info['blockchain'],
+                          None,
+                          datetime.now(),
+                          False,
+                          farm_info['aprYearly'],
+                          None,
+                          farm_info['tvlStaked'],
+                          'multifarm')
+
+    db.write_apy(apy_wrapper)
+    print ('finished writing multifarm pools to DB')
 
 sched.start()

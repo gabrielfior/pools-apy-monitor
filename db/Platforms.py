@@ -38,4 +38,3 @@ class StatsUrls(Enum):
     BEEFY_FINANCE_CELO_POOL_ADDRESS = 'https://raw.githubusercontent.com/beefyfinance/beefy-app/prod/src/features/configure/vault/celo_pools.js'
     BEEFY_FINANCE_BSC_POOL_ADDRESS = 'https://raw.githubusercontent.com/beefyfinance/beefy-app/prod/src/features/configure/vault/bsc_pools.js'
     YEARN_FINANCE = 'https://vaults.finance/all'
-    MULTIFARM_ANCHOR_APY = 'https://api.multifarm.fi/jay_flamingo_random_6ix_vegas/get_asset_details/TERRA_Anchor______29012_4500_UST'

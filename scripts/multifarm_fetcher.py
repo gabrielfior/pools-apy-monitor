@@ -1,14 +1,10 @@
-import datetime
-
 import requests
 
 from db.Platforms import StatsUrls
-import js2py
-
-from db.write_to_table import APYWrapper
 
 
 class MultifarmFetcher:
+    # ToDo - Check if APYs match platform's APYs (Anchor did not, diff 2%)
     def __init__(self, apy_url=StatsUrls.MULTIFARM_ANCHOR_APY.value):
         self.apy_url = apy_url
 

@@ -136,6 +136,7 @@ def timed_job_token_sets():
 
     print ('finished writing token sets to DB')
 
+'''
 @sched.scheduled_job('interval', minutes=45)
 def timed_job_multifarm():
     print ('processing job multifarm')
@@ -153,5 +154,6 @@ def timed_job_multifarm():
 
     db.write_apy(apy_wrapper)
     print ('finished writing multifarm pools to DB')
+'''
 
 sched.start()

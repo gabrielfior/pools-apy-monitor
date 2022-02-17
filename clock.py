@@ -15,7 +15,7 @@ from scripts.mirror_fetcher import MirrorFetcher
 sched = BlockingScheduler()
 
 
-@sched.scheduled_job('interval', minutes=1)
+@sched.scheduled_job('interval', minutes=45)
 def timed_job_beefy():
     print ('processing job beefy')
     db = DBWriter()
@@ -125,7 +125,7 @@ def timed_job_curve_base_apy():
                                  crawl_source='curve')  # no LP token available under this endpoint, to be determined if available elsewhere
         db.write_apy(apy_wrapper)
 
-@sched.scheduled_job('interval', minutes=1)
+@sched.scheduled_job('interval', minutes=45)
 def timed_job_token_sets():
     print ('processing job token sets')
     db = DBWriter()

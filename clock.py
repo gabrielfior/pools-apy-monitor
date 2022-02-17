@@ -10,8 +10,7 @@ from db.Platforms import Pools
 from db.write_to_table import APYWrapper, DBWriter
 from scripts.beefy_fetcher import BeefyFetcher
 from scripts.get_curve_base_apy import CurveFetcher
-from scripts.multifarm_fetcher import MultifarmFetcher
-from scripts.yearn_fetcher import YearnFetcher
+from scripts.mirror_fetcher import MirrorFetcher
 
 sched = BlockingScheduler()
 
@@ -135,6 +134,18 @@ def timed_job_token_sets():
     db.write_tokenset_value(tokensets_dict)
 
     print ('finished writing token sets to DB')
+
+
+@sched.scheduled_job('interval', days=1)
+def timed_job_mirror():
+    print ('processing job mirror')
+    db = DBWriter()
+    mirror_fetcher = MirrorFetcher()
+    
+    daily_apys, assets = mirror_fetcher.fetch_daily_stats()
+    apy_wrappers = mirror_fetcher.organize_daily_stats(daily_apys, assets)
+    db.write_all_apys(apy_wrappers)
+    print ('finished writing mirror pools to DB')
 
 '''
 @sched.scheduled_job('interval', minutes=45)

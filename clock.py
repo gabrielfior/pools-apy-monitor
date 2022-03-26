@@ -1,7 +1,10 @@
 from datetime import datetime
+from typing import List
 from apscheduler.schedulers.blocking import BlockingScheduler
 
 from brownie import run
+from apeboard_fetcher import ApeboardFetcher
+from aux_classes import AccountHolder, PoolBalanceHolder
 
 #from pycoingecko import CoinGeckoAPI
 
@@ -11,9 +14,22 @@ from db.write_to_table import APYWrapper, DBWriter
 from scripts.beefy_fetcher import BeefyFetcher
 from scripts.get_curve_base_apy import CurveFetcher
 from scripts.mirror_fetcher import MirrorFetcher
+from token_fetcher import TokenFetcher
 
 sched = BlockingScheduler()
 
+class FetchExecutor:
+    def fetch_tokens(self, account: AccountHolder):
+        tf = TokenFetcher({k:v for k,v in zip(
+            ['solana','terra','bsc','matic','fantom','eth'],
+            [account.account_solana, account.account_terra, account.account_bsc,
+        account.account_polygon, account.account_polygon, account.account_polygon]) if v is not None})
+        return tf.fetch_tokens()
+
+
+    def fetch_pools(self, account: AccountHolder):
+        af = ApeboardFetcher(account)
+        return af.fetch_data()
 
 @sched.scheduled_job('interval', minutes=45)
 def timed_job_beefy():
@@ -166,5 +182,40 @@ def timed_job_multifarm():
     db.write_apy(apy_wrapper)
     print ('finished writing multifarm pools to DB')
 '''
+
+@sched.scheduled_job('interval', hours=6)
+def timed_job_gf():
+    print ('processing portfolio job gf')
+    fe = FetchExecutor()
+    db = DBWriter()
+    
+    account_polygon = '0x2A333B3f9833558d583A6BADaBeCd62cE7A377b8'
+    account_bsc = '0xa1a65Db4D96eBD62e2Eb69B6a1983E5A9678fC57'
+    account_solana = 'E9rgWo1Pb2g2PtcAcGTAWJgpBGV7cMATZuZf1DTnypWF'
+    account_terra = 'terra1g3zhdkmdwdlmqqrlqjjprz2ndpdrnarx3w2jq7'
+    account_near = '380560062d8eb0805755a8abf1e9a64b8d2bdd64466300e7287832ac797ca326'
+    account_avax = '0x42DEF9Fd76CCa3636C8C5c3812458e5A4FBD9464'
+
+    account_gf = AccountHolder(account_polygon, account_bsc, account_terra, account_solana)
+
+    pool_list: List[PoolBalanceHolder] = fe.fetch_pools(account_gf)
+    token_list: List[PoolBalanceHolder] = fe.fetch_tokens(account_gf)
+    
+    db.write_portfolio_values('gf', pool_list + token_list)
+    print ('finished writing portfolio gf')
+
+@sched.scheduled_job('interval', hours=6)
+def timed_job_red():
+    print ('processing portfolio job red')
+    fe = FetchExecutor()
+    db = DBWriter()
+    
+    account_red = AccountHolder('0x0631F77f628216F6f33E2EA13ADaA2feAca1807f', None, None, None)
+
+    pool_list: List[PoolBalanceHolder] = fe.fetch_pools(account_red)
+    token_list: List[PoolBalanceHolder] = fe.fetch_tokens(account_red)
+    
+    db.write_portfolio_values('red', pool_list + token_list)
+    print ('finished writing portfolio red')
 
 sched.start()

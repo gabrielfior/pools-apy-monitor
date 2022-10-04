@@ -5,7 +5,7 @@ from scripts.beefy_fetcher import BeefyFetcher
 
 
 def test_beefy_fetcher():
-    database_url='postgresql://defai:rockettothemoon@159.223.12.238:5432/crawled_data'
+    database_url='###'
     db = DBWriter(DATABASE_URL=database_url)
     apy_wrappers = []
     apys, lp_json, pool_addresses_and_chain = BeefyFetcher().fetch_daily_stats()
